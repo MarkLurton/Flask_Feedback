@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% block title %} {{user.username}} info {% endblock
+%} {% block content %}
+<h1 class="display-1">
+  {{user.username}} {% if session['user_username'] == user.username %}
+  <form
+    style="display: inline"
+    action="/users/{{user.username}}/delete"
+    method="POST"
+  >
+    <button class="btn btn-sm btn-danger">
+      <i class="fas fa-trash"></i>
+    </button>
+  </form>
+  {% endif %}
+</h1>
+<div class="d-flex flex-column">
+  <span class="display-4"
+    >Email:
+    <p class="d-inline text-info">{{user.email}}</p></span
+  >
+  <span class="display-4"
+    >First Name:
+    <p class="d-inline text-info">{{user.first_name}}</p></span
+  >
+  <span class="display-4"
+    >Last Name:
+    <p class="d-inline text-info">{{user.last_name}}</p></span
+  >
+  {% if session['user_username'] == user.username %}
+  <a class="btn btn-success w-25" href="/users/{{user.username}}/feedback/add"
+    >Add Feedback</a
+  >
+  {% endif %} {% for fb in feedback %}
+  <div class="card my-4">
+    <div class="card-body">
+      <h5 class="card-title text-info">
+        {{fb.title}} {% if session['user_username'] == fb.username %}
+        <form
+          style="display: inline"
+          action="/feedback/{{fb.id}}/update"
+          method="GET"
+        >
+          <button class="btn btn-sm btn-info">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+        </form>
+        <form
+          style="display: inline"
+          action="/feedback/{{fb.id}}/delete"
+          method="POST"
+        >
+          <button class="btn btn-sm btn-danger">
+            <i class="fas fa-trash"></i>
+          </button>
+        </form>
+        {% endif %}
+      </h5>
+      <h6 class="card-subtitle mb-2 text-muted">by {{fb.username}}</h6>
+      <p class="card-text">{{fb.content}}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
